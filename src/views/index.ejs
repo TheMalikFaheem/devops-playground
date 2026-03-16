@@ -1,0 +1,36 @@
+<%- include('partials/header', { title }) %>
+
+<section class="card">
+  <h1><%= title %></h1>
+
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-error"><%= error %></div>
+  <% } %>
+
+  <p class="muted">
+    Practice Linux, Git/GitHub, Jenkins, Docker/Compose, Docker Hub, PostgreSQL, and networking with a small app that has real-world endpoints.
+  </p>
+
+  <div class="grid">
+    <div class="panel">
+      <h3>DevOps endpoints</h3>
+      <ul class="list">
+        <li><a href="/health">/health</a></li>
+        <li><a href="/ready">/ready</a></li>
+        <li><a href="/version">/version</a></li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Core features</h3>
+      <ul class="list">
+        <li>JWT auth + roles</li>
+        <li>Project CRUD</li>
+        <li>Task CRUD inside projects (todo / in-progress / done)</li>
+        <li>Project notes / incident log</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+

@@ -1,0 +1,31 @@
+<%- include('../partials/header', { title }) %>
+
+<section class="card">
+  <h1>Register</h1>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-error"><%= error %></div>
+  <% } %>
+  <form method="post" action="/auth/register">
+    <div class="row">
+      <div>
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" autocomplete="username" required />
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required />
+      </div>
+    </div>
+
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" autocomplete="new-password" required />
+
+    <div class="actions">
+      <button class="btn" type="submit">Create account</button>
+      <a class="btn btn-secondary" href="/auth/login">Already have an account?</a>
+    </div>
+  </form>
+</section>
+
+<%- include('../partials/footer') %>
+

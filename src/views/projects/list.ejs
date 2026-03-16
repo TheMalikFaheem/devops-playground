@@ -1,0 +1,21 @@
+<%- include('../partials/header', { title }) %>
+
+<section class="card">
+  <div class="actions" style="justify-content: space-between;">
+    <h1 style="margin:0;">Projects</h1>
+    <a class="btn" href="/projects/new">New project</a>
+  </div>
+
+  <% if (!projects || projects.length === 0) { %>
+    <p class="muted">No projects yet. Create one to start practicing.</p>
+  <% } else { %>
+    <ul class="list">
+      <% projects.forEach((p) => { %>
+        <li><a href="/projects/<%= p.id %>"><%= p.name %></a></li>
+      <% }) %>
+    </ul>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>
+

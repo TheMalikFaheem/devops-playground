@@ -1,0 +1,23 @@
+<%- include('../partials/header', { title }) %>
+
+<section class="card">
+  <h1>Admin Diagnostics</h1>
+
+  <div class="panel">
+    <p><strong>Hostname:</strong> <%= diagnostics.hostname %></p>
+    <p><strong>Uptime:</strong> <%= diagnostics.uptimeSeconds %> seconds</p>
+    <p><strong>Environment:</strong> <%= diagnostics.environment %></p>
+    <p><strong>App version:</strong> <%= diagnostics.appVersion %></p>
+    <p>
+      <strong>Database:</strong>
+      <% if (diagnostics.dbStatus.ok) { %>
+        <span class="muted">OK (<%= diagnostics.dbStatus.message %>)</span>
+      <% } else { %>
+        <span class="muted" style="color: var(--danger);">ERROR (<%= diagnostics.dbStatus.message %>)</span>
+      <% } %>
+    </p>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>
+

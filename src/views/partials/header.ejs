@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a class="brand" href="/">DevOps Playground</a>
+        <nav class="nav">
+          <a href="/projects">Projects</a>
+          <a href="/health">Health</a>
+          <a href="/version">Version</a>
+          <% if (user && user.role === 'admin') { %>
+            <a href="/admin/diagnostics">Diagnostics</a>
+          <% } %>
+        </nav>
+        <div class="auth">
+          <% if (user) { %>
+            <span class="muted">Signed in as <strong><%= user.username %></strong></span>
+            <form method="post" action="/auth/logout" class="inline">
+              <button class="btn btn-secondary" type="submit">Logout</button>
+            </form>
+          <% } else { %>
+            <a class="btn btn-secondary" href="/auth/login">Login</a>
+            <a class="btn" href="/auth/register">Register</a>
+          <% } %>
+        </div>
+      </div>
+    </header>
+    <main class="container">
+

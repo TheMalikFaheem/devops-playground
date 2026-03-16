@@ -1,0 +1,165 @@
+<%- include('../partials/header', { title }) %>
+
+<section class="card">
+  <div class="actions" style="justify-content: space-between;">
+    <div>
+      <h1 style="margin:0;"><%= project.name %></h1>
+      <p class="muted" style="margin: 6px 0 0;">
+        Owner: <strong><%= project.owner_username || 'unknown' %></strong>
+      </p>
+    </div>
+    <div class="actions" style="margin:0;">
+      <% if (canEdit) { %>
+        <a class="btn btn-secondary" href="/projects/<%= project.id %>/edit">Edit</a>
+        <form method="post" action="/projects/<%= project.id %>/delete" class="inline" onsubmit="return confirm('Delete this project?');">
+          <button class="btn" type="submit" style="border-color: rgba(255,107,107,0.35); background: rgba(255,107,107,0.12);">Delete</button>
+        </form>
+      <% } %>
+      <a class="btn btn-secondary" href="/projects">Back</a>
+    </div>
+  </div>
+
+  <% if (project.description) { %>
+    <p class="muted"><%= project.description %></p>
+  <% } %>
+
+  <div class="grid">
+    <div class="panel">
+      <h3>Tasks</h3>
+
+      <% if (tasks.length === 0) { %>
+        <p class="muted">No tasks yet.</p>
+      <% } else { %>
+        <ul class="list">
+          <% tasks.forEach((t) => { %>
+            <li>
+              <div style="display:flex; justify-content: space-between; gap: 10px; align-items: baseline; flex-wrap: wrap;">
+                <strong><%= t.title %></strong>
+                <span class="muted"><%= t.status %><% if (t.assigned_username) { %> • @<%= t.assigned_username %><% } %></span>
+              </div>
+              <% if (t.description) { %><div class="muted"><%= t.description %></div><% } %>
+
+              <% if (canEdit) { %>
+                <details style="margin-top:8px;">
+                  <summary class="muted">Edit</summary>
+                  <form method="post" action="/projects/<%= project.id %>/tasks/<%= t.id %>">
+                    <label>Title</label>
+                    <input name="title" value="<%= t.title %>" required />
+
+                    <label>Description</label>
+                    <textarea name="description"><%= t.description || '' %></textarea>
+
+                    <div class="row">
+                      <div>
+                        <label>Status</label>
+                        <select name="status">
+                          <option value="todo" <%= t.status === 'todo' ? 'selected' : '' %>>todo</option>
+                          <option value="in-progress" <%= t.status === 'in-progress' ? 'selected' : '' %>>in-progress</option>
+                          <option value="done" <%= t.status === 'done' ? 'selected' : '' %>>done</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label>Assign to</label>
+                        <select name="assigned_to">
+                          <option value="">(unassigned)</option>
+                          <% users.forEach((u) => { %>
+                            <option value="<%= u.id %>" <%= (t.assigned_to && Number(t.assigned_to) === Number(u.id)) ? 'selected' : '' %>><%= u.username %></option>
+                          <% }) %>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="actions">
+                      <button class="btn" type="submit">Save</button>
+                    </div>
+                  </form>
+                  <form method="post" action="/projects/<%= project.id %>/tasks/<%= t.id %>/delete" onsubmit="return confirm('Delete this task?');">
+                    <button class="btn btn-secondary" type="submit">Delete task</button>
+                  </form>
+                </details>
+              <% } %>
+            </li>
+          <% }) %>
+        </ul>
+      <% } %>
+
+      <% if (canEdit) { %>
+        <hr style="border: none; border-top: 1px solid var(--border); margin: 14px 0;" />
+        <h4>New Task</h4>
+        <form method="post" action="/projects/<%= project.id %>/tasks">
+          <label>Title</label>
+          <input name="title" required />
+
+          <label>Description</label>
+          <textarea name="description"></textarea>
+
+          <div class="row">
+            <div>
+              <label>Status</label>
+              <select name="status">
+                <option value="todo">todo</option>
+                <option value="in-progress">in-progress</option>
+                <option value="done">done</option>
+              </select>
+            </div>
+            <div>
+              <label>Assign to</label>
+              <select name="assigned_to">
+                <option value="">(unassigned)</option>
+                <% users.forEach((u) => { %>
+                  <option value="<%= u.id %>"><%= u.username %></option>
+                <% }) %>
+              </select>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn" type="submit">Add task</button>
+          </div>
+        </form>
+      <% } else { %>
+        <p class="muted">You can view tasks, but only the owner (or admin) can modify them.</p>
+      <% } %>
+    </div>
+
+    <div class="panel">
+      <h3>Notes / Incident Log</h3>
+
+      <% if (notes.length === 0) { %>
+        <p class="muted">No notes yet.</p>
+      <% } else { %>
+        <ul class="list">
+          <% notes.forEach((n) => { %>
+            <li>
+              <div class="muted">
+                <strong><%= n.author_username || 'unknown' %></strong>
+                • <%= new Date(n.created_at).toLocaleString() %>
+              </div>
+              <div><%= n.content %></div>
+              <% if (canEdit) { %>
+                <form method="post" action="/projects/<%= project.id %>/notes/<%= n.id %>/delete" class="inline" onsubmit="return confirm('Delete this note?');">
+                  <button class="btn btn-secondary" type="submit" style="margin-top: 6px;">Delete</button>
+                </form>
+              <% } %>
+            </li>
+          <% }) %>
+        </ul>
+      <% } %>
+
+      <% if (canEdit) { %>
+        <hr style="border: none; border-top: 1px solid var(--border); margin: 14px 0;" />
+        <h4>New note</h4>
+        <form method="post" action="/projects/<%= project.id %>/notes">
+          <label>Content</label>
+          <textarea name="content" required placeholder="What happened? What did you check? What fixed it?"></textarea>
+          <div class="actions">
+            <button class="btn" type="submit">Add note</button>
+          </div>
+        </form>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>
+

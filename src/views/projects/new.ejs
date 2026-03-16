@@ -1,0 +1,25 @@
+<%- include('../partials/header', { title }) %>
+
+<section class="card">
+  <h1>New Project</h1>
+
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-error"><%= error %></div>
+  <% } %>
+
+  <form method="post" action="/projects">
+    <label for="name">Name</label>
+    <input id="name" name="name" type="text" required />
+
+    <label for="description">Description</label>
+    <textarea id="description" name="description"></textarea>
+
+    <div class="actions">
+      <button class="btn" type="submit">Create</button>
+      <a class="btn btn-secondary" href="/projects">Cancel</a>
+    </div>
+  </form>
+</section>
+
+<%- include('../partials/footer') %>
+
