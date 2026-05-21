@@ -1,0 +1,80 @@
+<%- include('../partials/header', { title: 'LAN Legends' }) %>
+
+<link rel="stylesheet" href="/games/lan-legends/lan-legends.css" />
+
+<div class="lan-game-wrap">
+  <div class="lan-game-header">
+    <div>
+      <h1>LAN Legends</h1>
+      <p class="muted">Route data through the LAN. Block malware with firewalls, subnet masks, and pfSense.</p>
+    </div>
+    <div class="lan-stats">
+      <div class="lan-stat"><span class="muted">Level</span><strong id="stat-level">—</strong></div>
+      <div class="lan-stat"><span class="muted">Timer</span><strong id="stat-timer">—</strong></div>
+      <div class="lan-stat ok"><span class="muted">Delivered</span><strong id="stat-delivered">0/0</strong></div>
+      <div class="lan-stat danger"><span class="muted">Breaches</span><strong id="stat-leaks">0/0</strong></div>
+    </div>
+  </div>
+
+  <div class="lan-layout">
+    <div class="lan-board-panel">
+      <canvas id="lan-canvas" width="800" height="440" aria-label="LAN topology game board"></canvas>
+      <div id="lan-overlay" class="lan-overlay">
+        <div class="lan-modal card">
+          <h2 id="lan-overlay-title">LAN Legends</h2>
+          <p id="lan-overlay-text">Loading…</p>
+          <div id="lan-level-pills" class="lan-level-pills"></div>
+          <button type="button" class="btn" id="lan-overlay-btn">Start</button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="lan-sidebar">
+      <div class="panel">
+        <h3>Security toolkit</h3>
+        <div class="lan-tools">
+          <button type="button" class="lan-tool-btn" data-tool="route">
+            Enable Link
+            <small>Toggle cables between nodes (click two nodes or a link)</small>
+          </button>
+          <button type="button" class="lan-tool-btn" data-tool="firewall">
+            Block Port
+            <small>Firewalls — block malware when armed</small>
+          </button>
+          <button type="button" class="lan-tool-btn" data-tool="subnet">
+            Subnet Mask
+            <small>Routers — cycle /24, /25, or open ACL</small>
+          </button>
+          <button type="button" class="lan-tool-btn" data-tool="pfsense">
+            Deploy pfSense
+            <small>Edge gateway — 8s malware filter (14s cooldown)</small>
+          </button>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top: 12px">
+        <h3>Event log</h3>
+        <div id="lan-log" class="lan-log"></div>
+      </div>
+
+      <p id="lan-hint" class="lan-hint"></p>
+
+      <div class="lan-legend">
+        <span><i class="lan-dot data"></i> Data packet</span>
+        <span><i class="lan-dot malware"></i> Malware</span>
+        <span><i class="lan-dot firewall"></i> Firewall</span>
+        <span><i class="lan-dot pfsense"></i> pfSense</span>
+      </div>
+
+      <div class="lan-controls">
+        <button type="button" class="btn btn-secondary" id="btn-pause">Pause</button>
+        <button type="button" class="btn btn-secondary" id="btn-restart">Restart</button>
+        <a class="btn btn-secondary" href="/">Back to Playground</a>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script src="/games/lan-legends/lan-legends.js" defer></script>
+
+<%- include('../partials/footer') %>

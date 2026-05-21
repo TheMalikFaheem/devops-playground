@@ -20,6 +20,7 @@ const taskRoutes = require('./routes/tasks');
 const noteRoutes = require('./routes/notes');
 const healthRoutes = require('./routes/health');
 const adminRoutes = require('./routes/admin');
+const gamesRoutes = require('./routes/games');
 
 const app = express();
 
@@ -62,6 +63,7 @@ app.use('/projects', taskRoutes); // nested: /projects/:projectId/tasks
 app.use('/projects', noteRoutes); // nested: /projects/:projectId/notes
 app.use('/', healthRoutes);
 app.use('/admin', adminRoutes);
+app.use('/games', gamesRoutes);
 
 // Home page
 app.get('/', (req, res) => {

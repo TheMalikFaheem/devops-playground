@@ -13,6 +13,7 @@ A full-stack **Node.js + PostgreSQL** web application purpose-built for practici
 - [Architecture](#-architecture)
 - [Project Structure (What Already Exists)](#-project-structure-what-already-exists)
 - [Getting Started Locally](#-getting-started-locally)
+- [Deployment Guide](#-deployment-guide)
 - [API Endpoints & Routes](#-api-endpoints--routes)
 - [Testing](#-testing)
 - [DevOps Roadmap — Files You Need to Create](#-devops-roadmap--files-you-need-to-create)
@@ -42,6 +43,7 @@ DevOps Playground is a **project & task management** web app that lets users:
 | **Notes / Incident Log** | Attach notes to projects (e.g. incident post-mortems) |
 | **Admin Diagnostics** | Admin-only page showing hostname, uptime, app version, DB status |
 | **Health & Readiness** | `/health`, `/ready`, `/version` endpoints for container orchestration |
+| **LAN Legends** | In-browser networking puzzle — route packets, block malware (`/games/lan-legends`) |
 
 ---
 
@@ -144,7 +146,7 @@ devops-playground/
 
 ```bash
 # 1. Clone the repository
-git clone <your-repo-url>
+git clone https://github.com/TheMalikFaheem/devops-playground.git
 cd devops-playground
 
 # 2. Install dependencies
@@ -182,6 +184,22 @@ open http://localhost:3000
 
 ---
 
+## 🚢 Deployment Guide
+
+Full production deployment steps (VPS + systemd + Nginx, Render, Railway, env vars, and troubleshooting) are in **[DEPLOYMENT.md](./DEPLOYMENT.md)**.
+
+Repository: [github.com/TheMalikFaheem/devops-playground](https://github.com/TheMalikFaheem/devops-playground)
+
+Quick production start after DB is configured:
+
+```bash
+npm ci
+npm run db:migrate
+NODE_ENV=production npm start
+```
+
+---
+
 ## 🔗 API Endpoints & Routes
 
 ### Public (No Auth Required)
@@ -189,6 +207,7 @@ open http://localhost:3000
 | Method | Path | Description |
 |--------|------|-------------|
 | `GET` | `/` | Home page |
+| `GET` | `/games/lan-legends` | LAN Legends networking game |
 | `GET` | `/health` | Returns `{ status: "ok" }` — liveness probe |
 | `GET` | `/ready` | Returns `{ status: "ready", db: "ok" }` — readiness probe (checks DB) |
 | `GET` | `/version` | Returns `{ version: "1.0.0" }` |

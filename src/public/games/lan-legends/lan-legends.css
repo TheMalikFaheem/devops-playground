@@ -1,0 +1,235 @@
+/* LAN Legends — network puzzle / tower-defense game */
+
+.lan-game-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.lan-game-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.lan-game-header h1 {
+  margin: 0 0 4px;
+  font-size: 1.75rem;
+}
+
+.lan-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.lan-stat {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 14px;
+  background: rgba(0, 0, 0, 0.2);
+  font-size: 0.85rem;
+}
+
+.lan-stat strong {
+  display: block;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+.lan-stat.danger strong { color: var(--danger); }
+.lan-stat.ok strong { color: #5eead4; }
+
+.lan-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 900px) {
+  .lan-layout {
+    grid-template-columns: 1fr 280px;
+  }
+}
+
+.lan-board-panel {
+  position: relative;
+  min-height: 420px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+#lan-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: crosshair;
+}
+
+.lan-sidebar .panel h3 {
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+}
+
+.lan-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lan-tool-btn {
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(110, 168, 254, 0.1);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.lan-tool-btn:hover:not(:disabled) {
+  background: rgba(110, 168, 254, 0.22);
+}
+
+.lan-tool-btn.active {
+  border-color: var(--accent);
+  background: rgba(110, 168, 254, 0.28);
+}
+
+.lan-tool-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.lan-tool-btn small {
+  display: block;
+  color: var(--muted);
+  margin-top: 4px;
+  font-size: 0.75rem;
+}
+
+.lan-log {
+  margin-top: 12px;
+  max-height: 140px;
+  overflow-y: auto;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.lan-log p {
+  margin: 0 0 6px;
+}
+
+.lan-log .warn { color: #fbbf24; }
+.lan-log .bad { color: var(--danger); }
+.lan-log .good { color: #5eead4; }
+
+.lan-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.lan-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(11, 16, 32, 0.88);
+  backdrop-filter: blur(6px);
+  z-index: 5;
+  border-radius: 14px;
+}
+
+.lan-overlay.hidden { display: none; }
+
+.lan-modal {
+  text-align: center;
+  padding: 28px 32px;
+  max-width: 400px;
+}
+
+.lan-modal h2 {
+  margin: 0 0 12px;
+}
+
+.lan-modal p {
+  color: var(--muted);
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+
+.lan-level-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.lan-level-pill {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.lan-level-pill.done {
+  border-color: #5eead4;
+  color: #5eead4;
+}
+
+.lan-level-pill.locked {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.lan-hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(110, 168, 254, 0.08);
+  border: 1px solid var(--border);
+}
+
+.lan-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.lan-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lan-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.lan-dot.data { background: #5eead4; }
+.lan-dot.malware { background: var(--danger); }
+.lan-dot.firewall { background: #f97316; }
+.lan-dot.pfsense { background: #a78bfa; }
