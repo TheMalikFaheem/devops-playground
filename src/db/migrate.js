@@ -66,7 +66,9 @@ const migrate = async () => {
 
     console.log('\n✅ All migrations completed successfully!');
   } catch (err) {
-    console.error('❌ Migration failed:', err.message);
+    console.error('❌ Migration failed:', err.message || err);
+    if (err.code) console.error('   Error code:', err.code);
+    console.error('   Check: PostgreSQL is running, database exists, and .env DB_* values are correct.');
     process.exit(1);
   } finally {
     await db.pool.end();

@@ -17,8 +17,10 @@ db.query('SELECT 1')
     console.log('✅ Database connected successfully');
   })
   .catch((err) => {
-    console.error('⚠️  Database connection failed:', err.message);
-    console.error('   The app will start, but database features will not work.');
+    console.error('⚠️  Database connection failed:', err.message || err);
+    if (err.code) console.error('   Error code:', err.code);
+    console.error('   Fix .env (DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) and ensure PostgreSQL is running.');
+    console.error('   Then run: npm run db:migrate');
   });
 
 // Start the HTTP server

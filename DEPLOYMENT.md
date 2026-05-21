@@ -49,7 +49,93 @@ openssl rand -base64 48
 
 ---
 
-## 2. Database setup
+## 2. Fresh VPS setup (Ubuntu/Debian as root)
+
+If `npm run db:migrate` fails with an empty or connection error, PostgreSQL is usually **not installed**, **not running**, or **`.env` still has defaults**.
+
+### 2.1 Install PostgreSQL
+
+```bash
+apt update
+apt install -y postgresql postgresql-contrib
+systemctl enable postgresql
+systemctl start postgresql
+systemctl status postgresql
+```
+
+### 2.2 Create database and user
+
+```bash
+sudo -u postgres psql <<'SQL'
+CREATE USER devops_app WITH PASSWORD 'CHANGE_THIS_STRONG_PASSWORD';
+CREATE DATABASE devops_playground OWNER devops_app;
+GRANT ALL PRIVILEGES ON DATABASE devops_playground TO devops_app;
+SQL
+```
+
+Replace `CHANGE_THIS_STRONG_PASSWORD` with a real password.
+
+### 2.3 Configure `.env` on the server
+
+```bash
+cd ~/devops-playground   # or your clone path
+nano .env
+```
+
+Use these values (match the user/password you created):
+
+```env
+PORT=3000
+NODE_ENV=production
+
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_NAME=devops_playground
+DB_USER=devops_app
+DB_PASSWORD=CHANGE_THIS_STRONG_PASSWORD
+
+JWT_SECRET=paste-output-of-openssl-rand-base64-48
+APP_VERSION=1.0.0
+```
+
+Generate JWT secret:
+
+```bash
+openssl rand -base64 48
+```
+
+### 2.4 Test database connection
+
+```bash
+PGPASSWORD='CHANGE_THIS_STRONG_PASSWORD' psql -h 127.0.0.1 -U devops_app -d devops_playground -c 'SELECT 1'
+```
+
+If that works, migrate and seed:
+
+```bash
+npm run db:migrate
+npm run db:seed
+```
+
+### 2.5 Run for production (not `npm run dev`)
+
+```bash
+npm start
+```
+
+Access from your machine: `http://YOUR_SERVER_IP:3000` (open port 3000 in firewall/security group if needed).
+
+For a permanent service, use **systemd** (section 4 below) and **Nginx** on port 80/443 instead of exposing 3000 publicly.
+
+### 2.6 Stop anything on port 3000
+
+```bash
+lsof -ti :3000 | xargs kill -9
+```
+
+---
+
+## 3. Database setup (if Postgres already exists)
 
 Create the database (on your PostgreSQL server):
 
@@ -68,7 +154,7 @@ npm run db:seed   # optional — demo users/projects
 
 ---
 
-## 3. Run locally (production mode)
+## 4. Run locally (production mode)
 
 ```bash
 npm start
@@ -98,9 +184,9 @@ PORT=3001
 
 ---
 
-## 4. Deploy on a Linux VPS (systemd + Nginx)
+## 5. Deploy on a Linux VPS (systemd + Nginx)
 
-### 4.1 Install app on the server
+### 5.1 Install app on the server
 
 ```bash
 sudo apt update && sudo apt install -y nodejs npm postgresql nginx
@@ -116,7 +202,7 @@ cp .env.example .env
 npm run db:migrate
 ```
 
-### 4.2 systemd service
+### 5.2 systemd service
 
 Create `/etc/systemd/system/devops-playground.service`:
 
@@ -147,7 +233,7 @@ sudo systemctl start devops-playground
 sudo systemctl status devops-playground
 ```
 
-### 4.3 Nginx reverse proxy
+### 5.3 Nginx reverse proxy
 
 `/etc/nginx/sites-available/devops-playground`:
 
@@ -176,7 +262,7 @@ Add TLS with [Certbot](https://certbot.eff.org/) when your domain points at the 
 
 ---
 
-## 5. Deploy on Render (PaaS)
+## 6. Deploy on Render (PaaS)
 
 1. Create a **PostgreSQL** instance on Render and note the internal connection URL.
 2. Create a **Web Service** connected to `TheMalikFaheem/devops-playground`.
@@ -206,7 +292,7 @@ Add TLS with [Certbot](https://certbot.eff.org/) when your domain points at the 
 
 ---
 
-## 6. Deploy on Railway
+## 7. Deploy on Railway
 
 1. New project → **Deploy from GitHub** → select `devops-playground`.
 2. Add **PostgreSQL** plugin; Railway injects `DATABASE_URL` — map it to your app’s vars or extend `src/config/index.js` to parse `DATABASE_URL` if you add that support later.
@@ -216,7 +302,7 @@ Add TLS with [Certbot](https://certbot.eff.org/) when your domain points at the 
 
 ---
 
-## 7. Production checklist
+## 8. Production checklist
 
 - [ ] `NODE_ENV=production`
 - [ ] Strong, unique `JWT_SECRET` (never commit `.env`)
@@ -229,7 +315,7 @@ Add TLS with [Certbot](https://certbot.eff.org/) when your domain points at the 
 
 ---
 
-## 8. Verify deployment
+## 9. Verify deployment
 
 ```bash
 curl -s https://your-domain.com/health
@@ -244,7 +330,7 @@ In the browser:
 
 ---
 
-## 9. Troubleshooting
+## 10. Troubleshooting
 
 | Issue | Fix |
 |-------|-----|
@@ -256,7 +342,7 @@ In the browser:
 
 ---
 
-## 10. Updating a live deployment
+## 11. Updating a live deployment
 
 ```bash
 cd /var/www/devops-playground
